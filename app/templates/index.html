@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Problems - LeetCode Tracker{% endblock %}
+{% block content %}
+<h2>Problems</h2>
+
+<form method="get" class="filter-form">
+    <label>
+        Status
+        <select name="status">
+            <option value="">All</option>
+            {% for s in statuses %}
+                <option value="{{ s }}" {% if filters.status == s %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Difficulty
+        <select name="difficulty">
+            <option value="">All</option>
+            {% for d in difficulties %}
+                <option value="{{ d }}" {% if filters.difficulty == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Topic
+        <input type="text" name="topic" value="{{ filters.topic }}" placeholder="e.g. array">
+    </label>
+
+    <button type="submit">Filter</button>
+    <a href="{{ url_for('main.index') }}">Reset</a>
+</form>
+
+{% if problems %}
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Topic</th>
+            <th>Status</th>
+            <th>Date Solved</th>
+            <th>Notes / Update</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in problems %}
+        <tr class="difficulty-{{ p.difficulty|lower }}">
+            <td>
+                {% if p.url %}<a href="{{ p.url }}" target="_blank">{{ p.title }}</a>{% else %}{{ p.title }}{% endif %}
+            </td>
+            <td>{{ p.difficulty }}</td>
+            <td>{{ p.topic or "-" }}</td>
+            <td><span class="badge status-{{ p.status }}">{{ p.status }}</span></td>
+            <td>{{ p.date_solved or "-" }}</td>
+            <td>
+                <form method="post" action="{{ url_for('main.update_problem', problem_id=p.id) }}" class="update-form">
+                    <select name="status">
+                        {% for s in statuses %}
+                            <option value="{{ s }}" {% if p.status == s %}selected{% endif %}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="text" name="notes" value="{{ p.notes or '' }}" placeholder="notes">
+                    <button type="submit">Save</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No problems found. <a href="{{ url_for('main.add_problem') }}">Add one</a>.</p>
+{% endif %}
+{% endblock %}

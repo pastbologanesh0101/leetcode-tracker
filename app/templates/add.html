@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Add Problem - LeetCode Tracker{% endblock %}
+{% block content %}
+<h2>Add a Problem</h2>
+
+<form method="post" class="add-form">
+    <label>
+        Title *
+        <input type="text" name="title" value="{{ form.title or '' }}" required>
+    </label>
+
+    <label>
+        URL
+        <input type="url" name="url" value="{{ form.url or '' }}">
+    </label>
+
+    <label>
+        Difficulty *
+        <select name="difficulty" required>
+            <option value="">Select...</option>
+            {% for d in difficulties %}
+                <option value="{{ d }}" {% if form.difficulty == d %}selected{% endif %}>{{ d }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>
+        Topic / Tags
+        <input type="text" name="topic" value="{{ form.topic or '' }}" placeholder="e.g. array, two-pointers">
+    </label>
+
+    <label>
+        Notes
+        <textarea name="notes">{{ form.notes or '' }}</textarea>
+    </label>
+
+    <button type="submit">Add Problem</button>
+</form>
+{% endblock %}

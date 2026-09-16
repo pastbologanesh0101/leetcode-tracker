@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Stats - LeetCode Tracker{% endblock %}
+{% block content %}
+<h2>Stats</h2>
+
+<p>Total problems tracked: <strong>{{ total }}</strong></p>
+
+<section>
+    <h3>By Difficulty</h3>
+    <table>
+        <thead><tr><th>Difficulty</th><th>Count</th></tr></thead>
+        <tbody>
+            {% for d, c in by_difficulty.items() %}
+            <tr><td>{{ d }}</td><td>{{ c }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h3>By Status</h3>
+    <table>
+        <thead><tr><th>Status</th><th>Count</th></tr></thead>
+        <tbody>
+            {% for s, c in by_status.items() %}
+            <tr><td>{{ s }}</td><td>{{ c }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+<section>
+    <h3>Solved Per Week (last 8 weeks)</h3>
+    <table>
+        <thead><tr><th>Week</th><th>Solved</th></tr></thead>
+        <tbody>
+            {% for week in trend %}
+            <tr><td>{{ week.label }}</td><td>{{ "#" * week.count }} {{ week.count }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
